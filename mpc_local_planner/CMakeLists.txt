@@ -99,6 +99,7 @@ add_library(mpc_local_planner_optimal_control SHARED
 add_library(mpc_local_planner SHARED
    src/controller.cpp
    src/mpc_local_planner_ros.cpp
+   src/mpc_config.cpp
 )
 
 set(ament_dependencies
