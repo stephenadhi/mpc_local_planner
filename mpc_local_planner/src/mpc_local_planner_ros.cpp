@@ -99,7 +99,7 @@ void MpcLocalPlannerROS::initialize(rclcpp_lifecycle::LifecycleNode::SharedPtr n
         _robot_model = getRobotFootprintFromParamServer(node, _costmap_ros);
 
         // create the planner instance
-        if (!_controller.configure(node, _name, _obstacles, _robot_model, _via_points, &_params))
+        if (!_controller.configure(node, _name, _obstacles, _robot_model, _via_points, &_params, &_publisher))
         {
             RCLCPP_ERROR(_logger, "Controller configuration failed.");
             return;

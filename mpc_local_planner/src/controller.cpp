@@ -58,11 +58,12 @@
 namespace mpc_local_planner {
 
 bool MpcController::configure(const rclcpp_lifecycle::LifecycleNode::SharedPtr nh, std::string name, const teb_local_planner::ObstContainer& obstacles,
-                           teb_local_planner::RobotFootprintModelPtr robot_model, const std::vector<teb_local_planner::PoseSE2>& via_points, MpcConfig* params)
+                           teb_local_planner::RobotFootprintModelPtr robot_model, const std::vector<teb_local_planner::PoseSE2>& via_points, MpcConfig* params, Publisher* publisher)
 {
     nh_ = nh;
     name_ = name;
     params_ = params;
+    publisher_ = publisher;
 
     _dynamics = configureRobotDynamics(nh_);
     if (!_dynamics) return false;  // we may need state and control dimensions to check other parameters
@@ -81,9 +82,6 @@ bool MpcController::configure(const rclcpp_lifecycle::LifecycleNode::SharedPtr n
       "state_feedback",
       rclcpp::SystemDefaultsQoS(),
       std::bind(&MpcController::stateFeedbackCallback, this, std::placeholders::_1));
-
-    // result publisher:
-    _ocp_result_pub = nh_->create_publisher<mpc_local_planner_msgs::msg::OptimalControlResult>("ocp_result", 100);
 
     setAutoUpdatePreviousControl(false);  // we want to update the previous control value manually
 
@@ -215,7 +213,7 @@ void MpcController::publishOptimalControlResult()
         msg.controls      = _u_ts->getValues();
     }
 
-    _ocp_result_pub->publish(msg);
+    publisher_->publishOptimalControlResult(msg);
 }
 
 void MpcController::reset() { PredictiveController::reset(); }

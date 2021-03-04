@@ -53,6 +53,9 @@ nav2_util::CallbackReturn Publisher::on_configure()
     local_plan_pub_  = nh_->create_publisher<nav_msgs::msg::Path>("local_plan", 1);
     mpc_marker_pub_  = nh_->create_publisher<visualization_msgs::msg::Marker>("mpc_markers", 1000);
 
+  // result publisher:
+    _ocp_result_pub = nh_->create_publisher<mpc_local_planner_msgs::msg::OptimalControlResult>("ocp_result", 100);
+
   initialized_ = true;
   return nav2_util::CallbackReturn::SUCCESS;
 }
@@ -63,6 +66,7 @@ Publisher::on_activate()
   global_plan_pub_->on_activate();
   local_plan_pub_->on_activate();
   mpc_marker_pub_->on_activate();
+  _ocp_result_pub->on_activate();
 
   return nav2_util::CallbackReturn::SUCCESS;
 }
@@ -73,6 +77,7 @@ Publisher::on_deactivate()
   global_plan_pub_->on_deactivate();
   local_plan_pub_->on_deactivate();
   mpc_marker_pub_->on_deactivate();
+  _ocp_result_pub->on_deactivate();
 
   return nav2_util::CallbackReturn::SUCCESS;
 }
@@ -83,6 +88,7 @@ Publisher::on_cleanup()
   global_plan_pub_.reset();
   local_plan_pub_.reset();
   mpc_marker_pub_.reset();
+  _ocp_result_pub.reset();
 
   return nav2_util::CallbackReturn::SUCCESS;
 }
@@ -278,6 +284,11 @@ void Publisher::publishObstacles(const teb_local_planner::ObstContainer& obstacl
             mpc_marker_pub_->publish(marker);
         }
     }
+}
+
+void Publisher::publishOptimalControlResult(mpc_local_planner_msgs::msg::OptimalControlResult& msg)
+{
+    _ocp_result_pub->publish(msg);
 }
 
 void Publisher::publishViaPoints(const std::vector<teb_local_planner::PoseSE2>& via_points, const std::string& ns) const

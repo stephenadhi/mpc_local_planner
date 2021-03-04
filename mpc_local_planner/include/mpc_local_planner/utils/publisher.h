@@ -29,6 +29,8 @@
 #include <teb_local_planner/obstacles.h>
 #include <teb_local_planner/robot_footprint_model.h>
 
+#include <mpc_local_planner_msgs/msg/optimal_control_result.hpp>
+
 #include <geometry_msgs/msg/point_stamped.h>
 #include <geometry_msgs/msg/twist_stamped.hpp>
 #include <nav_msgs/msg/path.hpp>
@@ -125,6 +127,8 @@ class Publisher
      */
     void publishObstacles(const teb_local_planner::ObstContainer& obstacles) const;
 
+    void publishOptimalControlResult(mpc_local_planner_msgs::msg::OptimalControlResult& msg);
+
     /**
      * @brief Publish via-points to the ros topic \e ../../teb_markers
      *
@@ -158,6 +162,7 @@ class Publisher
     rclcpp_lifecycle::LifecyclePublisher<nav_msgs::msg::Path>::SharedPtr local_plan_pub_;
     rclcpp_lifecycle::LifecyclePublisher<nav_msgs::msg::Path>::SharedPtr global_plan_pub_;
     rclcpp_lifecycle::LifecyclePublisher<visualization_msgs::msg::Marker>::SharedPtr mpc_marker_pub_;
+    rclcpp_lifecycle::LifecyclePublisher<mpc_local_planner_msgs::msg::OptimalControlResult>::SharedPtr _ocp_result_pub;
 };
 
 }  // namespace mpc_local_planner

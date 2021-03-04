@@ -29,10 +29,11 @@
 
 #include <corbo-optimal-control/structured_ocp/structured_optimal_control_problem.h>
 #include <mpc_local_planner/mpc_config.h>
-#include <mpc_local_planner/optimal_control/stage_inequality_se2.h>
-#include <mpc_local_planner/systems/robot_dynamics_interface.h>
 #include <teb_local_planner/obstacles.h>
 #include <teb_local_planner/pose_se2.h>
+#include <mpc_local_planner/optimal_control/stage_inequality_se2.h>
+#include <mpc_local_planner/systems/robot_dynamics_interface.h>
+#include <mpc_local_planner/utils/publisher.h>
 
 #include <mpc_local_planner_msgs/msg/state_feedback.hpp>
 #include <mpc_local_planner_msgs/msg/optimal_control_result.hpp>
@@ -63,7 +64,7 @@ class MpcController : public corbo::PredictiveController
     MpcController() = default;
 
     bool configure(const rclcpp_lifecycle::LifecycleNode::SharedPtr nh, std::string name, const teb_local_planner::ObstContainer& obstacles, teb_local_planner::RobotFootprintModelPtr robot_model,
-                   const std::vector<teb_local_planner::PoseSE2>& via_points, MpcConfig* params);
+                   const std::vector<teb_local_planner::PoseSE2>& via_points, MpcConfig* params, Publisher* publisher);
     bool step(const PoseSE2& start, const PoseSE2& goal, const geometry_msgs::msg::Twist& vel, double dt, rclcpp::Time t, corbo::TimeSeries::Ptr u_seq,
               corbo::TimeSeries::Ptr x_seq);
 
@@ -119,6 +120,7 @@ class MpcController : public corbo::PredictiveController
     std::string name_;
     rclcpp_lifecycle::LifecycleNode::SharedPtr nh_;
     MpcConfig* params_;
+    Publisher* publisher_;
     rclcpp::Logger logger_{rclcpp::get_logger("mpc_local_planner")};
     corbo::DiscretizationGridInterface::Ptr _grid;
     RobotDynamicsInterface::Ptr _dynamics;
@@ -126,7 +128,6 @@ class MpcController : public corbo::PredictiveController
     StageInequalitySE2::Ptr _inequality_constraint;
     corbo::StructuredOptimalControlProblem::Ptr _structured_ocp;
 
-    rclcpp_lifecycle::LifecyclePublisher<mpc_local_planner_msgs::msg::OptimalControlResult>::SharedPtr _ocp_result_pub;
     bool _ocp_successful      = false;
     std::size_t _ocp_seq      = 0;
 
