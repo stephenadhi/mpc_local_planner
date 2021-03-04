@@ -822,7 +822,7 @@ teb_local_planner::RobotFootprintModelPtr MpcLocalPlannerROS::getRobotFootprintF
         double radius;
         if (!nh->get_parameter(_name + "." + "footprint_model.radius", radius))
         {
-            RCLCPP_ERROR_STREAM(_logger, "Footprint model 'circular' cannot be loaded for trajectory optimization, since param '/footprint_model/radius' does not exist. Using point-model instead.");
+            RCLCPP_ERROR_STREAM(_logger, "Footprint model 'circular' cannot be loaded for trajectory optimization, since param '/footprint_model.radius' does not exist. Using point-model instead.");
             return std::make_shared<teb_local_planner::PointRobotFootprint>();
         }
         RCLCPP_INFO_STREAM(_logger, "Footprint model 'circular' (radius: " << radius << "m) loaded for trajectory optimization.");
@@ -833,9 +833,9 @@ teb_local_planner::RobotFootprintModelPtr MpcLocalPlannerROS::getRobotFootprintF
     if (model_name.compare("line") == 0)
     {
         // check parameters
-        if (!nh->has_parameter(_name + "." + "footprint_model.line_start") || !nh->has_parameter(_name + "." + "footprint_model/line_end"))
+        if (!nh->has_parameter(_name + "." + "footprint_model.line_start") || !nh->has_parameter(_name + "." + "footprint_model.line_end"))
         {
-            RCLCPP_ERROR_STREAM(_logger, "Footprint model 'line' cannot be loaded for trajectory optimization, since param '/footprint_model/line_start' and/or '.../line_end' do not exist. Using point-model instead.");
+            RCLCPP_ERROR_STREAM(_logger, "Footprint model 'line' cannot be loaded for trajectory optimization, since param '/footprint_model.line_start' and/or '/footprint_model.line_end' do not exist. Using point-model instead.");
             return std::make_shared<teb_local_planner::PointRobotFootprint>();
         }
         // get line coordinates
@@ -845,7 +845,7 @@ teb_local_planner::RobotFootprintModelPtr MpcLocalPlannerROS::getRobotFootprintF
         if (line_start.size() != 2 || line_end.size() != 2)
         {
             RCLCPP_ERROR_STREAM(_logger,
-                "Footprint model 'line' cannot be loaded for trajectory optimization, since param '/footprint_model/line_start' and/or '.../line_end' do not contain x and y coordinates (2D). Using point-model instead.");
+                "Footprint model 'line' cannot be loaded for trajectory optimization, since param '/footprint_model.line_start' and/or '/footprint_model.line_end' do not contain x and y coordinates (2D). Using point-model instead.");
             return std::make_shared<teb_local_planner::PointRobotFootprint>();
         }
 
@@ -862,7 +862,7 @@ teb_local_planner::RobotFootprintModelPtr MpcLocalPlannerROS::getRobotFootprintF
         if (!nh->has_parameter(_name + "." + "footprint_model.front_offset") || !nh->has_parameter(_name + "." + "footprint_model.front_radius") ||
             !nh->has_parameter(_name + "." + "footprint_model.rear_offset") || !nh->has_parameter(_name + "." + "footprint_model.rear_radius"))
         {
-            RCLCPP_ERROR_STREAM(_logger,"Footprint model 'two_circles' cannot be loaded for trajectory optimization, since params '/footprint_model/front_offset', '.../front_radius', '.../rear_offset' and '.../rear_radius' do not exist. Using "
+            RCLCPP_ERROR_STREAM(_logger,"Footprint model 'two_circles' cannot be loaded for trajectory optimization, since params '/footprint_model.front_offset', '/footprint_model.front_radius', '.../rear_offset' and '.../rear_radius' do not exist. Using "
                                 "point-model instead.");
             return std::make_shared<teb_local_planner::PointRobotFootprint>();
         }
@@ -914,7 +914,7 @@ teb_local_planner::RobotFootprintModelPtr MpcLocalPlannerROS::getRobotFootprintF
 
   }
     // otherwise
-    RCLCPP_WARN_STREAM(_logger, "Unknown robot footprint model specified with parameter '/footprint_model/type'. Using point model instead.");
+    RCLCPP_WARN_STREAM(_logger, "Unknown robot footprint model specified with parameter '/footprint_model.type'. Using point model instead.");
     return std::make_shared<teb_local_planner::PointRobotFootprint>();
 }
 
