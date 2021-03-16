@@ -16,6 +16,8 @@ find_package(ament_cmake REQUIRED)
 find_package(builtin_interfaces REQUIRED)
 find_package(nav2_core REQUIRED)
 find_package(nav2_costmap_2d REQUIRED)
+find_package(nav2_util)
+find_package(nav_2d_utils)
 find_package(costmap_converter REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(geometry_msgs REQUIRED)
@@ -106,6 +108,8 @@ set(ament_dependencies
     builtin_interfaces
     nav2_core
     nav2_costmap_2d
+    nav2_util
+    nav_2d_utils
     costmap_converter
     rclcpp
     geometry_msgs

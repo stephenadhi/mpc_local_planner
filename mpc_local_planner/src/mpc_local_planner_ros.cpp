@@ -20,6 +20,7 @@
  *  Authors: Christoph Rösmann
  *********************************************************************/
 
+#include <nav_2d_utils/tf_help.hpp>
 #include <mpc_local_planner/mpc_local_planner_ros.h>
 
 #include <mpc_local_planner/utils/math_utils.h>
@@ -610,7 +611,10 @@ bool MpcLocalPlannerROS::transformGlobalPlan(const tf2_ros::Buffer& tf, const st
 
         // let's get the pose of the robot in the frame of the plan
         geometry_msgs::msg::PoseStamped robot_pose;
-        tf.transform(global_pose, robot_pose, plan_pose.header.frame_id);
+
+        rclcpp::Duration transform_tolerance = rclcpp::Duration::from_seconds(0.5);
+
+        nav_2d_utils::transformPose(_tf, plan_pose.header.frame_id, global_pose, robot_pose, transform_tolerance);
 
         // we'll discard points on the plan that are outside the local costmap
         double dist_threshold =

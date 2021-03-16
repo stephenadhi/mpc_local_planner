@@ -25,6 +25,8 @@
   <depend>builtin_interfaces</depend>
   <depend>nav2_core</depend>
   <depend>nav2_costmap_2d</depend>
+  <depend>nav2_util</depend>
+  <depend>nav_2d_utils</depend>
   <depend>costmap_converter</depend>
   <depend>eigen</depend>
   <depend>geometry_msgs</depend>
