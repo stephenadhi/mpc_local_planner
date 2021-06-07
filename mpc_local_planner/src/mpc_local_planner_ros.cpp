@@ -191,7 +191,10 @@ void MpcLocalPlannerROS::setPlan(const nav_msgs::msg::Path& orig_global_plan)
     return;
 }
 
-geometry_msgs::msg::TwistStamped MpcLocalPlannerROS::computeVelocityCommands(const geometry_msgs::msg::PoseStamped& pose, const geometry_msgs::msg::Twist& velocity)
+geometry_msgs::msg::TwistStamped MpcLocalPlannerROS::computeVelocityCommands(
+		const geometry_msgs::msg::PoseStamped& pose,
+		const geometry_msgs::msg::Twist& velocity,
+		nav2_core::GoalChecker * /*goal_checker*/)
 {
     // check if plugin initialized
     if (!_initialized)
@@ -954,7 +957,7 @@ void MpcLocalPlannerROS::cleanup() {
   return;
 }
 
-void MpcLocalPlannerROS::setSpeedLimit(const double& speed_limit)
+void MpcLocalPlannerROS::setSpeedLimit(const double& speed_limit, const bool& percentage)
 {
   auto node = _nh.lock();
   node->set_parameter(rclcpp::Parameter(_name + "." + "max_vel_x", rclcpp::ParameterValue(speed_limit)));

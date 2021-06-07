@@ -124,7 +124,8 @@ class MpcLocalPlannerROS : public nav2_core::Controller
      */
     geometry_msgs::msg::TwistStamped computeVelocityCommands(
       const geometry_msgs::msg::PoseStamped& pose,
-      const geometry_msgs::msg::Twist& velocity) override;
+      const geometry_msgs::msg::Twist& velocity,
+      nav2_core::GoalChecker * /*goal_checker*/) override;
 
     /** @name Public utility functions/methods */
     //@{
@@ -265,7 +266,7 @@ class MpcLocalPlannerROS : public nav2_core::Controller
      */
     void validateFootprints(double opt_inscribed_radius, double costmap_inscribed_radius, double min_obst_dist);
 
-    void setSpeedLimit(const double& speed_limit);
+    void setSpeedLimit(const double& speed_limit, const bool& percentage) override;
 
  private:
     // Definition of member variables
