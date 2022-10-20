@@ -25,7 +25,6 @@ find_package(interactive_markers REQUIRED)
 find_package(nav_msgs REQUIRED)
 find_package(mpc_local_planner_msgs REQUIRED)
 find_package(pluginlib REQUIRED)
-find_package(p90902_controller_msgs)
 find_package(rosidl_runtime_cpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(teb_local_planner REQUIRED)
@@ -117,7 +116,6 @@ set(ament_dependencies
     nav_msgs
     mpc_local_planner_msgs
     pluginlib
-    p90902_controller_msgs
     rosidl_runtime_cpp
     std_msgs
     teb_local_planner
