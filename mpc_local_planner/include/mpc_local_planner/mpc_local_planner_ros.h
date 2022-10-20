@@ -30,6 +30,7 @@
 
 // Navigation2 local planner base class and utilities
 #include <nav2_core/controller.hpp>
+#include <nav2_core/goal_checker.hpp>
 
 // mpc_local_planner related classes
 #include <mpc_local_planner/controller.h>
@@ -40,7 +41,7 @@
 #include <teb_local_planner/obstacles.h>
 #include <teb_local_planner/pose_se2.h>
 #include <teb_local_planner/robot_footprint_model.h>
-#include <teb_local_planner/costmap_converter_interface.h>
+#include <costmap_converter/costmap_converter_interface.h>
 
 // message types
 #include <costmap_converter_msgs/msg/obstacle_array_msg.hpp>
@@ -99,7 +100,7 @@ class MpcLocalPlannerROS : public nav2_core::Controller
      * @param costmap_ros Cost map representing occupied and free space
      */
     void configure(
-      const rclcpp_lifecycle::LifecycleNode::WeakPtr & node,
+      const rclcpp_lifecycle::LifecycleNode::SharedPtr& node,
       std::string name,
       const std::shared_ptr<tf2_ros::Buffer> & tf,
       const std::shared_ptr<nav2_costmap_2d::Costmap2DROS> & costmap_ros) override;
@@ -124,8 +125,7 @@ class MpcLocalPlannerROS : public nav2_core::Controller
      */
     geometry_msgs::msg::TwistStamped computeVelocityCommands(
       const geometry_msgs::msg::PoseStamped& pose,
-      const geometry_msgs::msg::Twist& velocity,
-      nav2_core::GoalChecker * /*goal_checker*/) override;
+      const geometry_msgs::msg::Twist& velocity) override;
 
     /** @name Public utility functions/methods */
     //@{
@@ -266,7 +266,7 @@ class MpcLocalPlannerROS : public nav2_core::Controller
      */
     void validateFootprints(double opt_inscribed_radius, double costmap_inscribed_radius, double min_obst_dist);
 
-    void setSpeedLimit(const double& speed_limit, const bool& percentage) override;
+    void setSpeedLimit(const double& speed_limit, const bool& percentage);
 
  private:
     // Definition of member variables

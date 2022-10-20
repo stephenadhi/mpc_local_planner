@@ -736,7 +736,7 @@ bool MpcController::isPoseTrajectoryFeasible(std::shared_ptr<dwb_critics::Obstac
 
     for (int i = 0; i <= look_ahead_idx; ++i)
     {
-        PoseSE2 pose(fd_grid->getState(i)[0], fd_grid->getState(i)[1], fd_grid->getState(i)[2], 0.);
+        PoseSE2 pose(fd_grid->getState(i)[0], fd_grid->getState(i)[1], fd_grid->getState(i)[2]);
         geometry_msgs::msg::Pose2D pose2d;
         pose.toPoseMsg(pose2d);
 

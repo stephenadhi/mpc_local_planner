@@ -50,7 +50,7 @@ MpcLocalPlannerROS::MpcLocalPlannerROS()
 }
 
 void MpcLocalPlannerROS::configure(
-    const rclcpp_lifecycle::LifecycleNode::WeakPtr & node_ptr,
+    const rclcpp_lifecycle::LifecycleNode::SharedPtr & node_ptr,
     std::string name,
     const std::shared_ptr<tf2_ros::Buffer> & tf,
     const std::shared_ptr<nav2_costmap_2d::Costmap2DROS> & costmap_ros) {
@@ -193,8 +193,7 @@ void MpcLocalPlannerROS::setPlan(const nav_msgs::msg::Path& orig_global_plan)
 
 geometry_msgs::msg::TwistStamped MpcLocalPlannerROS::computeVelocityCommands(
 		const geometry_msgs::msg::PoseStamped& pose,
-		const geometry_msgs::msg::Twist& velocity,
-		nav2_core::GoalChecker * /*goal_checker*/)
+		const geometry_msgs::msg::Twist& velocity)
 {
     // check if plugin initialized
     if (!_initialized)
