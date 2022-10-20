@@ -40,7 +40,9 @@
 #include <teb_local_planner/obstacles.h>
 #include <teb_local_planner/pose_se2.h>
 #include <teb_local_planner/robot_footprint_model.h>
-#include <teb_local_planner/costmap_converter_interface.h>
+
+// costmap converter interface
+#include <costmap_converter/costmap_converter_interface.h>
 
 // message types
 #include <costmap_converter_msgs/msg/obstacle_array_msg.hpp>
