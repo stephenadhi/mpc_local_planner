@@ -156,7 +156,7 @@ void MpcLocalPlannerROS::initialize(rclcpp_lifecycle::LifecycleNode::SharedPtr n
         global_plan_sub_ = node->create_subscription<nav_msgs::msg::Path>(
                     "path_utm", 
                     rclcpp::SystemDefaultsQoS(),
-                    std::bind(&TebLocalPlannerROS::customGlobalPlanCB, this, std::placeholders::_1));   
+                    std::bind(&MpcLocalPlannerROS::customGlobalPlanCB, this, std::placeholders::_1));   
 
         // set initialized flag
         _initialized = true;
