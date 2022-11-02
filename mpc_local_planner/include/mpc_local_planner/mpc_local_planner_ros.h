@@ -210,6 +210,12 @@ class MpcLocalPlannerROS : public nav2_core::Controller
      * @param dist_behind_robot Distance behind the robot that should be kept [meters]
      * @return \c true if the plan is pruned, \c false in case of a transform exception or if no pose cannot be found inside the threshold
      */
+    void customGlobalPlanCB(const nav_msgs::msg::Path::SharedPtr global_plan_msg);
+    
+    /**
+        * @brief Callback for custom global plan topic
+        * @param global_plan_msg pointer to the message containing the global plan
+        */
     bool pruneGlobalPlan(const tf2_ros::Buffer& tf, const geometry_msgs::msg::PoseStamped& global_pose,
                          std::vector<geometry_msgs::msg::PoseStamped>& _global_plan, double dist_behind_robot = 1);
 
@@ -299,10 +305,12 @@ class MpcLocalPlannerROS : public nav2_core::Controller
 
     rclcpp::Subscription<costmap_converter_msgs::msg::ObstacleArrayMsg>::SharedPtr _custom_obst_sub;                          //!< Subscriber for custom obstacles received via a ObstacleMsg.
     std::mutex _custom_obst_mutex;                             //!< Mutex that locks the obstacle array (multi-threaded)
+    std::mutex custom_global_plan_mutex_; //!< Mutex that locks the path array (multi-threaded)
     costmap_converter_msgs::msg::ObstacleArrayMsg _custom_obstacle_msg;  //!< Copy of the most recent obstacle message
 
     ViaPointContainer _via_points;
     rclcpp::Subscription<nav_msgs::msg::Path>::SharedPtr _via_points_sub;         //!< Subscriber for custom via-points received via a Path msg.
+    rclcpp::Subscription<nav_msgs::msg::Path>::SharedPtr global_plan_sub_; //!< Subscriber for custom global plan topic received via a Path msg.    
     bool _custom_via_points_active = false;  //!< Keep track whether valid via-points have been received from via_points_sub_
     std::mutex _via_point_mutex;             //!< Mutex that locks the via_points container (multi-threaded)
 
@@ -313,6 +321,9 @@ class MpcLocalPlannerROS : public nav2_core::Controller
     int _no_infeasible_plans = 0;          //!< Store how many times in a row the planner failed to find a feasible plan.
     geometry_msgs::msg::Twist _last_cmd;        //!< Store the last control command generated in computeVelocityCommands()
     rclcpp::Time _time_last_cmd;
+
+    // store path message for custom global plan topic
+    nav_msgs::msg::Path custom_global_plan_msg_;
 
     RobotFootprintModelPtr _robot_model;
 

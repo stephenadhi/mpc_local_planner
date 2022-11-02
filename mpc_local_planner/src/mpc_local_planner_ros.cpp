@@ -152,6 +152,11 @@ void MpcLocalPlannerROS::initialize(rclcpp_lifecycle::LifecycleNode::SharedPtr n
         // setup callback for custom via-points
         _via_points_sub = node->create_subscription<nav_msgs::msg::Path>("via_points", rclcpp::SystemDefaultsQoS(), std::bind(&MpcLocalPlannerROS::customViaPointsCB, this, std::placeholders::_1));
 
+        // setup call back for custom global plan topic
+        global_plan_sub_ = node->create_subscription<nav_msgs::msg::Path>(
+                    "path_utm", 
+                    rclcpp::SystemDefaultsQoS(),
+                    std::bind(&TebLocalPlannerROS::customGlobalPlanCB, this, std::placeholders::_1));   
 
         // set initialized flag
         _initialized = true;
@@ -164,7 +169,7 @@ void MpcLocalPlannerROS::initialize(rclcpp_lifecycle::LifecycleNode::SharedPtr n
     }
 }
 
-void MpcLocalPlannerROS::setPlan(const nav_msgs::msg::Path& orig_global_plan)
+void MpcLocalPlannerROS::setPlan(const nav_msgs::msg::Path& custom_global_plan_msg_)
 {
     // check if plugin is initialized
     if (!_initialized)
@@ -176,13 +181,13 @@ void MpcLocalPlannerROS::setPlan(const nav_msgs::msg::Path& orig_global_plan)
     // store the global plan
   // store the global plan
     _global_plan.clear();
-    _global_plan.reserve(orig_global_plan.poses.size());
+    _global_plan.reserve(custom_global_plan_msg_.poses.size());
 
-    for(const auto &in_pose :orig_global_plan.poses)
+    for(const auto &in_pose :custom_global_plan_msg_.poses)
     {
     geometry_msgs::msg::PoseStamped out_pose;
     out_pose.pose = in_pose.pose;
-    out_pose.header = orig_global_plan.header;
+    out_pose.header = custom_global_plan_msg_.header;
     _global_plan.push_back(out_pose);
     }
 
@@ -790,6 +795,11 @@ void MpcLocalPlannerROS::customViaPointsCB(const nav_msgs::msg::Path::ConstShare
         _via_points.emplace_back(pose.pose);
     }
     _custom_via_points_active = !_via_points.empty();
+}
+void MpcLocalPlannerROS::customGlobalPlanCB(const nav_msgs::msg::Path::SharedPtr global_plan_msg)
+{
+    std::lock_guard<std::mutex> l(custom_global_plan_mutex_);
+    custom_global_plan_msg_ = *global_plan_msg;  
 }
 
 teb_local_planner::RobotFootprintModelPtr MpcLocalPlannerROS::getRobotFootprintFromParamServer(const rclcpp_lifecycle::LifecycleNode::SharedPtr nh,
