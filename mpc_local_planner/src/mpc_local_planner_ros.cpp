@@ -154,7 +154,7 @@ void MpcLocalPlannerROS::initialize(rclcpp_lifecycle::LifecycleNode::SharedPtr n
 
         // setup call back for custom global plan topic
         global_plan_sub_ = node->create_subscription<nav_msgs::msg::Path>(
-                    "path_utm", 
+                    _params.global_plan_topic, 
                     rclcpp::SystemDefaultsQoS(),
                     std::bind(&MpcLocalPlannerROS::customGlobalPlanCB, this, std::placeholders::_1));   
 

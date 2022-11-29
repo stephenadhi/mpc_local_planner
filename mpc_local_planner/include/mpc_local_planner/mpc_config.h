@@ -20,6 +20,7 @@ public:
 
   std::string odom_topic;
   std::string map_frame;
+  std::string global_plan_topic;
 
   std::string costmap_converter_plugin;
   double costmap_converter_rate;
@@ -218,6 +219,7 @@ public:
   {
     odom_topic = "odom";
     map_frame= "odom";
+    global_plan_topic = "plan";
 
     costmap_converter_rate      = 5;
     costmap_converter_spin_thread = true;

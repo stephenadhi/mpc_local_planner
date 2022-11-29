@@ -6,6 +6,7 @@ void MpcConfig::declareParameters(const nav2_util::LifecycleNode::SharedPtr node
 {
   node->declare_parameter(name + "." + "odom_topic", odom_topic);
   node->declare_parameter(name + "." + "map_frame", map_frame);
+  node->declare_parameter(name + "." + "global_plan_topic", global_plan_topic);
 
   node->declare_parameter(name + "." + "costmap_converter_plugin", costmap_converter_plugin);
   node->declare_parameter(name + "." + "costmap_converter_rate", costmap_converter_rate);
@@ -142,6 +143,7 @@ void MpcConfig::declareParameters(const nav2_util::LifecycleNode::SharedPtr node
 void MpcConfig::loadRosParamFromNodeHandle(const nav2_util::LifecycleNode::SharedPtr node, const std::string name)
 {
   node->get_parameter_or(name + "." + "odom_topic", odom_topic, odom_topic);
+  node->get_parameter_or(name + "." + "global_plan_topic", global_plan_topic, global_plan_topic);
   node->get_parameter_or(name + "." + "map_frame", map_frame, map_frame);
 
   node->get_parameter_or(name + "." + "costmap_converter_plugin", costmap_converter_plugin, costmap_converter_plugin);
